@@ -5,8 +5,8 @@ tg.expand();
 // ============================================
 // ⚠️ НАСТРОЙКИ
 // ============================================
-const MANAGER_USERNAME = 'pizdezix'; // без @
-const EUR_RATE = 19.9;                // 1 EUR = 19.9 MDL
+const MANAGER_USERNAME = 'pizdezix';
+const EUR_RATE = 19.9;
 
 // ============================================
 // ТОВАРЫ
@@ -177,6 +177,11 @@ function updateCart() {
     }
 
     renderCartItems();
+
+    const badge = document.getElementById('cartBadge');
+    badge.classList.remove('pop');
+    void badge.offsetWidth;
+    badge.classList.add('pop');
 }
 
 function renderCartItems() {
@@ -297,7 +302,19 @@ function denyAge() {
     tg.close();
     document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#fff;font-family:sans-serif;text-align:center;padding:20px;"><div><h2>Доступ запрещён</h2><p style="margin-top:12px;opacity:0.6;">Сайт доступен только лицам старше 18 лет.</p></div></div>';
 }
-// Проверка при загрузке
 if (localStorage.getItem('ageConfirmed') === 'yes') {
     document.getElementById('ageGate').classList.add('hidden');
 }
+
+// ============================================
+// ПАРАЛЛАКС БАННЕРА
+// ============================================
+const heroImg = document.querySelector('.hero img');
+if (heroImg) {
+    window.addEventListener('scroll', () => {
+        const scrolled = window.scrollY;
+        if (scrolled < 500) {
+            heroImg.style.transform = `translateY(${scrolled * 0.3}px) scale(1.05)`;
+        }
+    }, { passive: true });
+        }
