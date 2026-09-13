@@ -13,18 +13,18 @@ const EUR_RATE = 19.9;
 // price: 0 → "Под заказ"
 // ============================================
 const products = [
-    { id: 1, name: 'Жидкость Blueberry Ice 30мл', price: 250, category: 'Жидкости',
-      img: ['https://images.unsplash.com/photo-1567696911980-2eed69a46042?w=500'] },
-    { id: 2, name: 'Одноразка Elf Bar 5000', price: 350, category: 'Одноразки',
-      img: ['https://images.unsplash.com/photo-1610461888750-10bfc601b874?w=500'] },
-    { id: 3, name: 'Под Voopoo Drag', price: 890, category: 'Поды',
-      img: ['https://images.unsplash.com/photo-1567721913486-6585f069b332?w=500'] },
-    { id: 4, name: 'Картридж для Pod', price: 180, category: 'Картриджи',
-      img: ['https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500'] },
-    { id: 5, name: 'Испаритель 0.6 Ohm', price: 120, category: 'Аксессуары',
-      img: ['https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500'] },
-    { id: 6, name: 'Жидкость Mango 60мл', price: 420, category: 'Жидкости',
-      img: ['https://images.unsplash.com/photo-1567696153798-9111f9cd3d0d?w=500'] },
+    { id: 1, name: 'Sauvage Elixir', price: 2490, category: 'Мужские',
+      img: ['https://images.unsplash.com/photo-1541643600914-78b084683601?w=600'] },
+    { id: 2, name: 'La Vie Est Belle', price: 2190, category: 'Женские',
+      img: ['https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600'] },
+    { id: 3, name: 'Bleu de Chanel', price: 2890, category: 'Мужские',
+      img: ['https://images.unsplash.com/photo-1587017539504-67cfbddac569?w=600'] },
+    { id: 4, name: 'Black Opium', price: 2350, category: 'Женские',
+      img: ['https://images.unsplash.com/photo-1615634260167-c8cdede054de?w=600'] },
+    { id: 5, name: 'Baccarat Rouge 540', price: 5990, category: 'Нишевые',
+      img: ['https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=600'] },
+    { id: 6, name: 'Oud Wood', price: 4290, category: 'Унисекс',
+      img: ['https://images.unsplash.com/photo-1619994403073-2cec844b8e63?w=600'] },
 ];
 
 let cart = {};
@@ -49,13 +49,13 @@ function cardTemplate(p) {
     const firstImg = getImages(p)[0];
     const priceHtml = p.price > 0
         ? `<div class="price">${p.price} MDL</div>
-           <div class="price-eur">~${toEur(p.price)} €</div>`
+           <div class="price-eur">~ ${toEur(p.price)} €</div>`
         : `<div class="price">Под заказ</div>
            <div class="price-eur">Цена по запросу</div>`;
     return `
         <div class="card-img-wrap">
             <img src="${firstImg}" alt="${p.name}" loading="lazy"
-                 onerror="this.src='https://via.placeholder.com/400x400/161616/888?text=no+image'">
+                 onerror="this.src='https://via.placeholder.com/400x533/1a1815/c9a961?text=ESSENCE'">
             <button class="card-add" data-id="${p.id}">+</button>
         </div>
         <div class="card-info">
@@ -66,7 +66,7 @@ function cardTemplate(p) {
 }
 
 // ============================================
-// НОВИНКИ
+// НОВИНКИ (карусель)
 // ============================================
 const newEl = document.getElementById('newProducts');
 products.slice(0, 6).forEach(p => {
@@ -163,15 +163,17 @@ function updateCart() {
     document.getElementById('barCount').innerText = count;
 
     let barText;
-    if (total > 0 && hasOnOrder) barText = `${total} MDL + под заказ`;
-    else if (total > 0) barText = `${total} MDL (~${eurTotal} €)`;
+    if (total > 0 && hasOnOrder) barText = `${total} + заказ`;
+    else if (total > 0) barText = `${total}`;
     else barText = 'Под заказ';
     document.getElementById('barTotal').innerText = barText;
 
     if (total > 0 && hasOnOrder) {
-        document.getElementById('modalTotal').innerHTML = `${total} MDL<br><span style="font-size:12px;opacity:0.6;font-weight:500;">+ товары под заказ</span>`;
+        document.getElementById('modalTotal').innerHTML =
+            `${total} MDL<br><span style="font-size:11px;opacity:0.6;font-weight:400;">+ товары под заказ</span>`;
     } else if (total > 0) {
-        document.getElementById('modalTotal').innerHTML = `${total} MDL<br><span style="font-size:13px;opacity:0.6;font-weight:500;">~${eurTotal} €</span>`;
+        document.getElementById('modalTotal').innerHTML =
+            `${total} MDL<br><span style="font-size:13px;opacity:0.5;font-weight:400;">~ ${eurTotal} €</span>`;
     } else {
         document.getElementById('modalTotal').innerHTML = 'Под заказ';
     }
@@ -188,7 +190,7 @@ function renderCartItems() {
     const container = document.getElementById('cartItems');
     container.innerHTML = '';
     if (Object.keys(cart).length === 0) {
-        container.innerHTML = '<p style="opacity:0.5;padding:24px 0;text-align:center;">Корзина пуста</p>';
+        container.innerHTML = '<p style="opacity:0.4;padding:30px 0;text-align:center;font-family:Cormorant Garamond, serif;font-style:italic;font-size:15px;">Корзина пуста</p>';
         return;
     }
     for (const id in cart) {
@@ -248,7 +250,7 @@ document.getElementById('closeManagerBtn').addEventListener('click', () => manag
 managerModal.addEventListener('click', (e) => { if (e.target === managerModal) managerModal.classList.remove('open'); });
 
 // ============================================
-// ОФОРМЛЕНИЕ
+// ОФОРМЛЕНИЕ ЗАКАЗА
 // ============================================
 document.getElementById('checkoutBtn').addEventListener('click', () => {
     if (Object.keys(cart).length === 0) {
@@ -278,7 +280,7 @@ document.getElementById('checkoutBtn').addEventListener('click', () => {
     else if (total > 0) totalText = `${total} MDL (~${eurTotal} €)`;
     else totalText = 'Всё под заказ';
 
-    const message = `Здравствуйте! Хочу оформить заказ:\n\n${orderText}\n\nИтого: ${totalText}`;
+    const message = `Здравствуйте! Хочу оформить заказ в Essence:\n\n${orderText}\n\nИтого: ${totalText}`;
 
     cartModal.classList.remove('open');
     managerModal.classList.add('open');
@@ -292,29 +294,39 @@ document.getElementById('checkoutBtn').addEventListener('click', () => {
 });
 
 // ============================================
-// 18+ ПОДТВЕРЖДЕНИЕ
-// ============================================
-function confirmAge() {
-    localStorage.setItem('ageConfirmed', 'yes');
-    document.getElementById('ageGate').classList.add('hidden');
-}
-function denyAge() {
-    tg.close();
-    document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#fff;font-family:sans-serif;text-align:center;padding:20px;"><div><h2>Доступ запрещён</h2><p style="margin-top:12px;opacity:0.6;">Сайт доступен только лицам старше 18 лет.</p></div></div>';
-}
-if (localStorage.getItem('ageConfirmed') === 'yes') {
-    document.getElementById('ageGate').classList.add('hidden');
-}
-
-// ============================================
 // ПАРАЛЛАКС БАННЕРА
 // ============================================
 const heroImg = document.querySelector('.hero img');
 if (heroImg) {
+    let rafId;
     window.addEventListener('scroll', () => {
-        const scrolled = window.scrollY;
-        if (scrolled < 500) {
-            heroImg.style.transform = `translateY(${scrolled * 0.3}px) scale(1.05)`;
-        }
+        if (rafId) return;
+        rafId = requestAnimationFrame(() => {
+            const scrolled = window.scrollY;
+            if (scrolled < 600) {
+                heroImg.style.transform = `translateY(${scrolled * 0.25}px) scale(1.1)`;
+            }
+            rafId = null;
+        });
     }, { passive: true });
+}
+
+// ============================================
+// ПЛАВНОЕ ПОЯВЛЕНИЕ СЕКЦИЙ ПРИ ПРОКРУТКЕ
+// ============================================
+const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+            sectionObserver.unobserve(entry.target);
         }
+    });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.section').forEach(sec => {
+    sec.style.opacity = '0';
+    sec.style.transform = 'translateY(40px)';
+    sec.style.transition = 'opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1)';
+    sectionObserver.observe(sec);
+});
