@@ -24,6 +24,40 @@
             color: var(--text);
             padding-bottom: 90px;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ===== АНИМАЦИИ ===== */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%   { transform: scale(1); }
+            50%  { transform: scale(1.25); }
+            100% { transform: scale(1); }
+        }
+        @keyframes gradientShift {
+            0%   { background-position: 0% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes badgePop {
+            0%   { transform: scale(1); }
+            50%  { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+        @keyframes shimmer {
+            0%   { background-position: -400px 0; }
+            100% { background-position: 400px 0; }
+        }
+        @keyframes glow {
+            0%,100% { box-shadow: 0 0 0 0 rgba(0,224,160,0.5); }
+            50%     { box-shadow: 0 0 0 8px rgba(0,224,160,0); }
         }
 
         /* ===== ВОЗРАСТНОЕ ПОДТВЕРЖДЕНИЕ ===== */
@@ -34,27 +68,42 @@
             display: flex; align-items: center; justify-content: center;
             padding: 20px;
             text-align: center;
+            animation: fadeUp 0.5s ease;
         }
         #ageGate.hidden { display: none; }
-        .age-box { max-width: 360px; }
+        .age-box { max-width: 360px; animation: fadeUp 0.7s ease; }
         .age-box h2 {
-            font-size: 26px; font-weight: 900;
-            letter-spacing: -1px; margin-bottom: 12px;
-            background: linear-gradient(90deg, #00e0a0, #a855f7);
+            font-size: 28px; font-weight: 900;
+            letter-spacing: 2px; margin-bottom: 16px;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #00e0a0, #a855f7, #00e0a0);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: gradientShift 4s ease infinite;
         }
-        .age-box p { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
+        .age-box p { font-size: 14px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
         .age-buttons { display: flex; gap: 10px; }
         .age-buttons button {
             flex: 1; padding: 14px;
             font-size: 13px; font-weight: 700;
             letter-spacing: 1px; text-transform: uppercase;
-            border: none; cursor: pointer; border-radius: 10px;
+            border: none; cursor: pointer; border-radius: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .age-yes { background: linear-gradient(90deg, #00e0a0, #a855f7); color: #fff; }
-        .age-no { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.2) !important; }
+        .age-buttons button:active { transform: scale(0.96); }
+        .age-yes {
+            background: linear-gradient(90deg, #00e0a0, #a855f7);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(168,85,247,0.4);
+        }
+        .age-no {
+            background: transparent; color: #fff;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+        }
 
         /* ===== ШАПКА ===== */
         .header {
@@ -68,14 +117,17 @@
         .logo {
             font-size: 18px; font-weight: 900;
             letter-spacing: 2px; text-transform: uppercase;
-            background: linear-gradient(90deg, #00e0a0, #a855f7);
+            background: linear-gradient(90deg, #00e0a0, #a855f7, #00e0a0);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: gradientShift 4s ease infinite;
         }
         .header-icons { display: flex; gap: 16px; align-items: center; }
         .header-icons svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 1.8; }
-        .cart-icon-wrap { position: relative; cursor: pointer; }
+        .cart-icon-wrap { position: relative; cursor: pointer; transition: transform 0.2s; }
+        .cart-icon-wrap:active { transform: scale(0.9); }
         .cart-badge {
             position: absolute; top: -6px; right: -8px;
             background: linear-gradient(90deg, #00e0a0, #a855f7);
@@ -86,41 +138,57 @@
             display: flex; align-items: center; justify-content: center;
             padding: 0 4px;
         }
+        .cart-badge.pop { animation: badgePop 0.4s ease; }
 
         /* ===== БАННЕР ===== */
-        .hero { position: relative; margin-bottom: 28px; }
-        .hero img { width: 100%; height: 420px; object-fit: cover; display: block; opacity: 0.6; }
+        .hero {
+            position: relative; margin-bottom: 28px;
+            overflow: hidden;
+        }
+        .hero img {
+            width: 100%; height: 420px; object-fit: cover; display: block;
+            opacity: 0.6;
+            transition: transform 0.1s linear;
+            will-change: transform;
+        }
         .hero-overlay {
             position: absolute; inset: 0;
             background: linear-gradient(to top, rgba(10,10,10,1), rgba(10,10,10,0.2));
             display: flex; align-items: flex-end; justify-content: center;
             padding-bottom: 48px;
         }
-        .hero-text { text-align: center; color: #fff; padding: 0 20px; }
+        .hero-text { text-align: center; color: #fff; padding: 0 20px; animation: fadeUp 0.8s ease; }
         .hero-logo {
             font-size: 44px; font-weight: 900;
             letter-spacing: -2px; text-transform: uppercase;
             margin-bottom: 6px;
-            background: linear-gradient(90deg, #00e0a0, #a855f7);
+            background: linear-gradient(90deg, #00e0a0, #a855f7, #00e0a0);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            animation: gradientShift 4s ease infinite;
         }
         .hero-tagline {
             font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
             margin-bottom: 24px; opacity: 0.7;
         }
         .hero-btn {
-            background: linear-gradient(90deg, #00e0a0, #a855f7);
+            background: linear-gradient(90deg, #00e0a0, #a855f7, #00e0a0);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
             color: #fff; border: none;
             padding: 14px 36px; font-size: 12px;
             font-weight: 700; letter-spacing: 1.5px;
             text-transform: uppercase; cursor: pointer;
             border-radius: 30px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(168,85,247,0.4);
         }
+        .hero-btn:active { transform: scale(0.96); }
 
         /* ===== СЕКЦИИ ===== */
-        .section { margin-bottom: 36px; }
+        .section { margin-bottom: 36px; animation: fadeUp 0.6s ease both; }
         .section-title {
             font-size: 18px; font-weight: 800;
             padding: 0 16px; margin-bottom: 16px;
@@ -144,16 +212,33 @@
         }
 
         /* ===== КАРТОЧКА ===== */
-        .card { cursor: pointer; }
+        .card {
+            cursor: pointer;
+            animation: fadeUp 0.5s ease both;
+        }
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.15s; }
+        .card:nth-child(4) { animation-delay: 0.2s; }
+        .card:nth-child(5) { animation-delay: 0.25s; }
+        .card:nth-child(6) { animation-delay: 0.3s; }
+
         .card-img-wrap {
             position: relative; width: 100%;
             aspect-ratio: 1 / 1;
-            background: var(--card);
+            background: linear-gradient(90deg, #161616 0%, #1e1e1e 50%, #161616 100%);
+            background-size: 800px 100%;
+            animation: shimmer 1.5s infinite linear;
             border: 1px solid var(--border);
             border-radius: 14px;
             overflow: hidden;
         }
-        .card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .card-img-wrap img {
+            position: relative;
+            z-index: 1;
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+        }
         .card-info { padding-top: 10px; }
         .card h3 { font-size: 13px; font-weight: 600; line-height: 1.35; margin-bottom: 4px; }
         .card .price {
@@ -173,6 +258,13 @@
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 4px 12px rgba(0,224,160,0.4);
+            z-index: 2;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+        .card-add:active { animation: pulse 0.3s ease; }
+        .card-add:hover {
+            box-shadow: 0 6px 20px rgba(168,85,247,0.6);
+            transform: scale(1.05);
         }
 
         /* ===== VIEW ALL ===== */
@@ -184,7 +276,9 @@
             font-weight: 700; letter-spacing: 1.5px;
             text-transform: uppercase; cursor: pointer;
             border-radius: 30px;
+            transition: transform 0.2s, background 0.3s;
         }
+        .view-all:active { transform: scale(0.96); }
 
         /* ===== НИЖНЯЯ ПАНЕЛЬ ===== */
         .bottom-bar {
@@ -199,13 +293,17 @@
         }
         .bottom-bar .info { font-size: 13px; font-weight: 600; }
         .bottom-bar .btn {
-            background: linear-gradient(90deg, #00e0a0, #a855f7);
+            background: linear-gradient(90deg, #00e0a0, #a855f7, #00e0a0);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
             color: #fff; border: none;
             padding: 10px 22px; font-size: 12px;
             font-weight: 700; letter-spacing: 1px;
             text-transform: uppercase; cursor: pointer;
             border-radius: 30px;
+            transition: transform 0.2s;
         }
+        .bottom-bar .btn:active { transform: scale(0.95); }
 
         /* ===== КАТЕГОРИИ ===== */
         .categories {
@@ -221,9 +319,13 @@
             border-radius: 20px; background: transparent;
             color: var(--text);
             cursor: pointer; white-space: nowrap;
+            transition: transform 0.2s;
         }
+        .cat-btn:active { transform: scale(0.95); }
         .cat-btn.active {
-            background: linear-gradient(90deg, #00e0a0, #a855f7);
+            background: linear-gradient(90deg, #00e0a0, #a855f7, #00e0a0);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite, glow 2s ease infinite;
             color: #fff; border-color: transparent;
         }
 
@@ -231,6 +333,7 @@
         .modal {
             position: fixed; inset: 0;
             background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(4px);
             display: none; align-items: flex-end;
             z-index: 100;
         }
@@ -243,6 +346,7 @@
             border-radius: 18px 18px 0 0;
             padding: 20px 16px 24px;
             border-top: 1px solid var(--border);
+            animation: slideUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .modal-content h2 {
             font-size: 18px; font-weight: 800;
@@ -253,6 +357,7 @@
             display: flex; align-items: center; gap: 12px;
             padding: 10px 0;
             border-bottom: 1px solid var(--border);
+            animation: fadeUp 0.3s ease;
         }
         .cart-item img { width: 56px; height: 56px; object-fit: cover; border-radius: 8px; background: #222; }
         .cart-item-info { flex: 1; }
@@ -265,6 +370,11 @@
             border-radius: 50%; background: transparent;
             color: #fff;
             font-size: 16px; cursor: pointer;
+            transition: transform 0.15s, background 0.2s;
+        }
+        .qty-controls button:active {
+            transform: scale(0.85);
+            background: rgba(255,255,255,0.1);
         }
         .modal-total {
             display: flex; justify-content: space-between;
@@ -279,15 +389,20 @@
             letter-spacing: 1px; text-transform: uppercase;
             border: none; cursor: pointer;
             border-radius: 30px;
+            transition: transform 0.2s;
         }
+        .modal-actions button:active { transform: scale(0.96); }
         .btn-close {
             background: transparent;
             color: var(--text);
             border: 1px solid rgba(255,255,255,0.2) !important;
         }
         .btn-pay {
-            background: linear-gradient(90deg, #00e0a0, #a855f7);
+            background: linear-gradient(90deg, #00e0a0, #a855f7, #00e0a0);
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
             color: #fff;
+            box-shadow: 0 4px 20px rgba(168,85,247,0.4);
         }
         .manager-text {
             font-size: 14px; color: var(--muted);
@@ -302,7 +417,6 @@
 </head>
 <body>
 
-    <!-- 18+ ПОДТВЕРЖДЕНИЕ -->
     <div id="ageGate">
         <div class="age-box">
             <h2>VAPE STORE</h2>
@@ -314,7 +428,6 @@
         </div>
     </div>
 
-    <!-- ШАПКА -->
     <header class="header">
         <div class="logo">VAPE STORE</div>
         <div class="header-icons">
@@ -325,7 +438,6 @@
         </div>
     </header>
 
-    <!-- БАННЕР -->
     <section class="hero">
         <img src="https://images.unsplash.com/photo-1535043934128-cf0b28d52f95?w=800" alt="VAPE STORE">
         <div class="hero-overlay">
@@ -364,7 +476,6 @@
         <button class="btn" id="openCartBtn">Корзина</button>
     </div>
 
-    <!-- КОРЗИНА -->
     <div class="modal" id="cartModal">
         <div class="modal-content">
             <h2>Корзина</h2>
@@ -380,7 +491,6 @@
         </div>
     </div>
 
-    <!-- МЕНЕДЖЕР -->
     <div class="modal" id="managerModal">
         <div class="modal-content" style="text-align:center;">
             <h2 style="margin-bottom:12px;">Спасибо за заказ! 🎉</h2>
@@ -396,4 +506,4 @@
 
     <script src="app.js"></script>
 </body>
-  </html>
+</html>
